@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Rewrite;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// injecting the ITodoService implementation into the DI container
+builder.Services.AddSingleton<ITodoService, InMemoryTodoService>();
+
 var app = builder.Build();
 
 // register the rewriter middleware
@@ -22,9 +25,9 @@ app.Use(async (context, next) =>
 
 var todos = new List<Todo>();
 
-app.MapPost("/todos", (Todo task) =>
+app.MapPost("/todos", (Todo task, ITodoService todoService) =>
 {
-    todos.Add(task);
+    todoService.AddTodo(task);
     return TypedResults.Created($"/todos/{task.Id}", task);
 })
 .AddEndpointFilter(async (context, next) =>
@@ -46,24 +49,24 @@ app.MapPost("/todos", (Todo task) =>
     return await next(context);
 });
 
-app.MapGet("/todos", (ITodoService todoService) => todos);
+app.MapGet("/todos", (ITodoService todoService) => todoService.GetTodos());
 
-app.MapGet("/todos/{id}", Results<Ok<Todo>, NotFound> (int id) =>
+app.MapGet("/todos/{id}", Results<Ok<Todo>, NotFound> (int id, ITodoService todoService) =>
 {
-    var targetTodo = todos.SingleOrDefault(t => t.Id == id);
+    var targetTodo = todoService.GetTodoById(id);
     return targetTodo is null
         ? TypedResults.NotFound()
         : TypedResults.Ok(targetTodo);
 });
 
-app.MapDelete("/todos/{id}", Results<NoContent, NotFound> (int id) =>
+app.MapDelete("/todos/{id}", Results<NoContent, NotFound> (int id, ITodoService todoService) =>
 {
-    var targetTodo = todos.SingleOrDefault(t => t.Id == id);
+    var targetTodo = todoService.GetTodoById(id);
     if (targetTodo is null)
     {
         return TypedResults.NotFound();
     }
-    todos.Remove(targetTodo);
+    todoService.DeleteTodoById(id);
     return TypedResults.NoContent();
 });
 
@@ -72,6 +75,8 @@ app.Run();
 // Entities ----------------------------------------------------------------------------------------
 
 public record Todo(int Id, string Name, DateTime DueDate, bool IsComplete);
+
+// "Business" logic services -----------------------------------------------------------------------
 
 interface ITodoService
 {
