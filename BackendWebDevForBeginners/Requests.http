@@ -1,0 +1,26 @@
+
+POST http://localhost:5187/todos
+Content-Type: application/json
+
+{
+  "id": 2,
+  "name": "Buy milk",
+  "dueDate": "2025-01-07",
+  "isComplete": false
+}
+
+###
+
+GET http://localhost:5187/todos
+
+###
+
+GET http://localhost:5187/todos/2
+
+###
+
+DELETE http://localhost:5187/todos/2
+
+###
+
+GET http://localhost:5187/tasks/2
