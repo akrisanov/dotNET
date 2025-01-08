@@ -5,7 +5,7 @@ Content-Type: application/json
 {
   "id": 2,
   "name": "Buy milk",
-  "dueDate": "2025-01-07",
+  "dueDate": "2025-01-08",
   "isComplete": false
 }
 
