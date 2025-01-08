@@ -10,14 +10,17 @@
 <button class="btn btn-primary" @onclick="IncrementCountAsync">Call the function</button>
 
 <div class="mt-3">
-    <input value="@text" @onchange="OnChange" />
+    <input @bind="text" @bind:event="oninput" @bind:after="Search" />
     <button @onclick="OnClick">Clear</button>
     <p>@text</p>
+    <p>@searchResult</p>
 </div>
+
 
 @code {
     private int currentCount = 0;
     private string? text;
+    private string searchResult = string.Empty;
 
     private void IncrementCount() => currentCount++;
 
@@ -26,6 +29,11 @@
         await Task.Delay(100);
         currentCount++;
     }
-    private void OnChange(ChangeEventArgs e) => text = e.Value?.ToString();
     private void OnClick(MouseEventArgs e) => text = string.Empty;
+    private async Task Search()
+    {
+        searchResult = "Searching...";
+        await Task.Delay(1500);
+        searchResult = $"Found {Random.Shared.Next()} results!";
+    }
 }
