@@ -8,34 +8,24 @@
 <p role="status">Current count: @currentCount</p>
 
 <button class="btn btn-primary" @onclick="IncrementCountAsync">Call the function</button>
-<button class="btn btn-secondary" @onclick="() => currentCount++">Inline execution</button>
 
 <div class="mt-3">
-    <input @oninput="OnInput" />
+    <input value="@text" @onchange="OnChange" />
+    <button @onclick="OnClick">Clear</button>
     <p>@text</p>
-</div>
-
-<MyButton class="btn btn-success" OnClick="IncrementCount">
-    Fire the event!
-</MyButton>
-
-<div style="background-color: lightblue;" @onmouseover="OnMouseOver" @onmouseout="OnMouseOut">
-    <p>@divText</p>
 </div>
 
 @code {
     private int currentCount = 0;
     private string? text;
-    private string divText = "div text";
 
     private void IncrementCount() => currentCount++;
 
     async Task IncrementCountAsync()
     {
-        await Task.Delay(1000);
+        await Task.Delay(100);
         currentCount++;
     }
-    private void OnInput(ChangeEventArgs e) => text = e.Value?.ToString();
-    private void OnMouseOver(MouseEventArgs e) => divText = "Mouse is over the div";
-    private void OnMouseOut(MouseEventArgs e) => divText = "Mouse is out of the div";
+    private void OnChange(ChangeEventArgs e) => text = e.Value?.ToString();
+    private void OnClick(MouseEventArgs e) => text = string.Empty;
 }
