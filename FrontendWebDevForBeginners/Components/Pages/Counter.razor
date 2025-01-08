@@ -1,5 +1,4 @@
-﻿@page "/counter/{initialCount:int?}"
-@page "/counter2"
+﻿@page "/counter"
 @rendermode InteractiveServer
 
 <PageTitle>Counter</PageTitle>
@@ -8,28 +7,35 @@
 
 <p role="status">Current count: @currentCount</p>
 
-@if (currentCount > 3)
-{
-    <p>Wow, you clicked the button @currentCount times!</p>
-}
+<button class="btn btn-primary" @onclick="IncrementCountAsync">Call the function</button>
+<button class="btn btn-secondary" @onclick="() => currentCount++">Inline execution</button>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<div class="mt-3">
+    <input @oninput="OnInput" />
+    <p>@text</p>
+</div>
 
-<p>InitialCount = @InitialCount</p>
+<MyButton class="btn btn-success" OnClick="IncrementCount">
+    Fire the event!
+</MyButton>
+
+<div style="background-color: lightblue;" @onmouseover="OnMouseOver" @onmouseout="OnMouseOut">
+    <p>@divText</p>
+</div>
 
 @code {
-    [Parameter]
-    public int? InitialCount { get; set; }
-
-    protected override void OnInitialized()
-    {
-        currentCount = InitialCount ?? 0;
-    }
-
     private int currentCount = 0;
+    private string? text;
+    private string divText = "div text";
 
-    private void IncrementCount()
+    private void IncrementCount() => currentCount++;
+
+    async Task IncrementCountAsync()
     {
+        await Task.Delay(1000);
         currentCount++;
     }
+    private void OnInput(ChangeEventArgs e) => text = e.Value?.ToString();
+    private void OnMouseOver(MouseEventArgs e) => divText = "Mouse is over the div";
+    private void OnMouseOut(MouseEventArgs e) => divText = "Mouse is out of the div";
 }
