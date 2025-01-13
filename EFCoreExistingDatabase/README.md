@@ -28,6 +28,13 @@ dotnet \
 
 Use partial classes and extension methods to separate business logic from the generated code.
 
+```shell
+dotnet \
+    ef dbcontext scaffold "Data Source=../EFCoreForBeginners/Pizza.db" \
+    Microsoft.EntityFrameworkCore.Sqlite --context-dir Data --output-dir Models/Generated \
+    --context-namespace Pizza.Data --namespace Pizza.Models
+```
+
 ## What to do when the database schema changes
 
 ### Manual Approach
