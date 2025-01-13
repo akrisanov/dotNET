@@ -13,6 +13,8 @@ public class IndexModel(PizzaDbContext context) : PageModel
 
     public async Task OnGetAsync()
     {
-        Product = await _context.Products.ToListAsync();
+        Product = await _context.Products
+                            .AsNoTracking() // skip the snapshot change tracking for read-only scenarios
+                            .ToListAsync();
     }
 }
