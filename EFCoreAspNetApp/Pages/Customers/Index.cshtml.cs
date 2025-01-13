@@ -14,6 +14,10 @@ public class IndexModel(PizzaDbContext context) : PageModel
 
     public async Task OnGetAsync()
     {
-        Customer = await _context.Customers.ToListAsync();
+        Customer = await _context.Customers
+                            .Include(c => c.Orders)
+                            .ThenInclude(od => od.OrderDetails)
+                            .AsSplitQuery()
+                            .ToListAsync();
     }
 }
