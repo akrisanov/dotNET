@@ -3,13 +3,13 @@ using Pizza.Models;
 
 namespace Pizza.Data;
 
-public partial class PizzaContext : DbContext
+public partial class PizzaDbContext : DbContext
 {
-    public PizzaContext()
+    public PizzaDbContext()
     {
     }
 
-    public PizzaContext(DbContextOptions<PizzaContext> options)
+    public PizzaDbContext(DbContextOptions<PizzaDbContext> options)
         : base(options)
     {
     }

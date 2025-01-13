@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddDbContext<PizzaContext>(options =>
+builder.Services.AddDbContext<PizzaDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("PizzaStore")));
 
 var app = builder.Build();

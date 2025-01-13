@@ -17,5 +17,5 @@ dotnet user-secrets set "ConnectionStrings:PizzaStore" "Data Source=../EFCoreFor
 ## Scaffold CRUD pages
 
 ```shell
-dotnet 
+dotnet scaffold
 ```
