@@ -20,7 +20,10 @@ public class DetailsModel(PizzaDbContext context) : PageModel
             return NotFound();
         }
 
-        var customer = await _context.Customers.FirstOrDefaultAsync(m => m.Id == id);
+        var customer = await _context.Customers
+                .FromSqlInterpolated($"SELECT * FROM Customers WHERE Id = {id}")
+                .FirstOrDefaultAsync();
+
         if (customer is null)
         {
             return NotFound();
